@@ -1,7 +1,15 @@
 import { getCommits, getRepositories, getUser } from "./services/github/functions";
 
-getUser(100)
-    .then((user) => getRepositories(user.email))
-    .then((repos) => getCommits(repos[0].name))
-    .then((commits) => console.log(commits))
-    .catch((error) => console.log(error.message));
+async function displayCommitsOfUser(): Promise<void> {
+    try {
+        const user = await getUser(100);
+        const repositories = await getRepositories(user.email);
+        const commits = await getCommits(repositories[0].name);
+        console.log(commits);
+    } catch (error) {
+        if (error instanceof Error)
+            console.log(error.message);
+    }
+}
+
+displayCommitsOfUser();
